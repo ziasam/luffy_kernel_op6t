@@ -1354,10 +1354,12 @@ static int __init init_zswap(void)
 	if (zswap_debugfs_init())
 		pr_warn("debugfs initialization failed\n");
 	return 0;
-	
-	zswap_cpu_dstmem_destroy();
 
+pool_fool:	
+	zswap_cpu_dstmem_destroy();
+hp_fail:
 	cpuhp_remove_state(CPUHP_MM_ZSWP_MEM_PREPARE);
+dstmem_fail:	
 	zswap_entry_cache_destroy();
 cache_fail:
 	/* if built-in, we aren't unloaded on failure; don't allow use */
